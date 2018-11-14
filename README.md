@@ -25,5 +25,6 @@ Bibliography:
 2. Monom: https://en.wikipedia.org/wiki/Monomial
 3. Root: https://he.wikipedia.org/wiki/%D7%A9%D7%99%D7%98%D7%AA_%D7%94%D7%97%D7%A6%D7%99%D7%99%D7%94 
 4. Area (Riman’s integral): https://en.wikipedia.org/wiki/Riemann_integral
+
 5.How to import gral JAR: https://stackoverflow.com/questions/3280353/how-to-import-a-jar-in-eclipse
 6.xyplot:https://github.com/eseifert/gral/wiki/xyplot
