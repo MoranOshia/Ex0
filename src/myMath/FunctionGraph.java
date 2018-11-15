@@ -24,7 +24,14 @@ public class FunctionGraph extends JFrame {
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(500, 500);
-		show (pointsOfThePoly, extremum);
+		
+		XYPlot plot = new XYPlot(pointsOfThePoly, extremum);
+		getContentPane().add(new InteractivePanel(plot));
+		LineRenderer lines = new DefaultLineRenderer2D();
+		plot.setLineRenderers(pointsOfThePoly, lines);
+		Color c = new Color(0,215,0);
+		plot.getPointRenderers(pointsOfThePoly).get(0).setColor(c);
+		plot.getLineRenderers(pointsOfThePoly).get(0).setColor(c);
 	}
 
 	/**
@@ -57,75 +64,56 @@ public class FunctionGraph extends JFrame {
 		Polynom_able pDer = poly.derivative();
 
 		for (double x = x0; x <= x1; x+=0.01) {
-
-			double d0 = pDer.f(x-0.01);
-			double d1 = pDer.f(x+0.01);
-			if (checkDerivative(d0, d1)==true) {
-
-				while (checkDerivative(d0, d1)==true) {
-					x += 0.01;
-					d0 = pDer.f(x-0.01);
-					d1 = pDer.f(x+0.01);
-				}
-				double pointX= x;
+			double xNext=x+0.01;
+			double d0 = pDer.f(x);
+			double d1 = pDer.f(xNext);
+			if (d0*d1<=0) 
+			{
+				
+				double pointX;
+				pointX=rootExm(x, xNext, 0.001,pDer);
 				double pointY = poly.f(pointX);
 				pointX= Double.parseDouble(df2.format(pointX));
 				pointY=Double.parseDouble(df2.format(pointY));
 				extremum.add(pointX, pointY);
 
-				//System.out.println("(" + pointX + ", " + pointY + ")");
+				System.out.println("(" + pointX + ", " + pointY + ")");
 				x=pointX;
 			}
 		}
 
 		return extremum;
 	}
+	public  double rootExm(double x0, double x1, double eps,Polynom_able p) {
+
+		double mid=0;
+		if(p.f(x0)*p.f(x1)<=0)
+		{
+			while(p.f(x0)*p.f(x1)<eps)
+			{
+				mid=(x0+x1)/2;
+				if(p.f(mid)==0)
+					return mid;
+				else
+				{
+					if(p.f(x0)*p.f(mid)>0) {
+						x0=mid;
+						mid = (x1+x0)/2;
+					}
+
+					else {
+						x1=mid;
+						mid = (x1+x0)/2;
+					}
+				}
+			}
+			return mid;
+		}
+		else
+			throw new IllegalArgumentException("Not possible f(x0)*f(x1) must be small or equal to 0 ");
+	}
 
 	private static DecimalFormat df2 = new DecimalFormat(".###"); //present 3 digit after points
-
-	
-
-	/**
-	 * check if the derivative if zero in the range of the epsilon
-	 * @param d0 - the answer in x of the derivative minus the epsilon
-	 * @param d1 - the answer in x of the derivative plus the epsilon
-	 * @return true if it possible to min or max
-	 */
-	private boolean checkDerivative(double d0, double d1) {
-		if (d0 < 0) {//possible of minimum
-			if (d1 > 0) {
-				return true;
-			}
-		}
-		else if (d0 > 0) {//possible of maximum
-			if (d1 < 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * 
-	 * @param ploy points of the polynom's function
-	 * @param points that are suspected to be extremum in the function
-	 */
-	private void show (DataTable poly, DataTable ext) {
-
-		XYPlot plot = new XYPlot(poly, ext);
-		getContentPane().add(new InteractivePanel(plot));
-		LineRenderer lines = new DefaultLineRenderer2D();
-		plot.setLineRenderers(poly, lines);
-		Color c = new Color(0,215,0);
-		plot.getPointRenderers(poly).get(0).setColor(c);
-		plot.getLineRenderers(poly).get(0).setColor(c);
-	}
-
-
-
-
-
-
 
 
 }
