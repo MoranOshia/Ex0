@@ -28,3 +28,5 @@ Bibliography:
 
 5.How to import gral JAR: https://stackoverflow.com/questions/3280353/how-to-import-a-jar-in-eclipse
 6.xyplot:https://github.com/eseifert/gral/wiki/xyplot
+
+***i didn't get reviews on my Assignment in the first part of the ex1.
